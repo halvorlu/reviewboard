@@ -96,6 +96,20 @@ class ResourceListTests(SpyAgency, ExtraDataListMixin, BaseWebAPITestCase):
         self.assertEqual(rsp['stat'], 'ok')
         self.assertEqual(len(rsp['review_requests']), 6)
 
+        unpublished_params = {'status': 'all', 'show-all-unpublished': True}
+        rsp = self.api_get(url, unpublished_params,
+                           expected_mimetype=review_request_list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertEqual(len(rsp['review_requests']), 6)
+
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='can_submit_as_another_user'))
+
+        rsp = self.api_get(url, unpublished_params,
+                           expected_mimetype=review_request_list_mimetype)
+        self.assertEqual(rsp['stat'], 'ok')
+        self.assertEqual(len(rsp['review_requests']), 7)
+
         self._login_user(admin=True)
         rsp = self.api_get(url, {'status': 'all'},
                            expected_mimetype=review_request_list_mimetype)
@@ -103,13 +117,8 @@ class ResourceListTests(SpyAgency, ExtraDataListMixin, BaseWebAPITestCase):
         self.assertEqual(len(rsp['review_requests']), 6)
 
         self._login_user(admin=True)
-        rsp = self.api_get(
-            url,
-            {
-                'status': 'all',
-                'show-all-unpublished': True,
-            },
-            expected_mimetype=review_request_list_mimetype)
+        rsp = self.api_get(url, unpublished_params,
+                           expected_mimetype=review_request_list_mimetype)
         self.assertEqual(rsp['stat'], 'ok')
         self.assertEqual(len(rsp['review_requests']), 7)
 
