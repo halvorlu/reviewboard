@@ -960,10 +960,11 @@ class ReviewRequestResource(MarkdownFieldsMixin, WebAPIResource):
             },
             'show-all-unpublished': {
                 'type': bool,
-                'description': 'If set, and if the user is an admin, '
-                               'unpublished review requests will also '
-                               'be returned.',
-                'aded_in': '2.0.8',
+                'description': 'If set, and if the user is an admin or has '
+                               'the "reviews.can_submit_as_another_user" '
+                               'permission, unpublished review requests '
+                               'will also be returned.',
+                'added_in': '2.0.8',
             },
             'issue-dropped-count': {
                 'type': bool,
