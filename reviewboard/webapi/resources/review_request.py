@@ -407,7 +407,9 @@ class ReviewRequestResource(MarkdownFieldsMixin, WebAPIResource):
 
             can_submit_as = request.user.has_perm(
                 'reviews.can_submit_as_another_user', local_site)
-            show_all_unpublished = ('show-all-unpublished' in request.GET and
+            request_unpublished = request.GET.get('show-all-unpublished',
+                                                  False)
+            show_all_unpublished = (request_unpublished and
                                     (can_submit_as or
                                      request.user.is_superuser))
 
