@@ -408,8 +408,8 @@ class ReviewRequestResource(MarkdownFieldsMixin, WebAPIResource):
             can_submit_as = request.user.has_perm(
                 'reviews.can_submit_as_another_user', local_site)
 
-            if request.GET.get('show-all-unpublished', '0')\
-               in ('0', 'false', 'False'):
+            request_unpublished = request.GET.get('show-all-unpublished', '0')
+            if request_unpublished in ('0', 'false', 'False'):
                 request_unpublished = False
             else:
                 request_unpublished = True
